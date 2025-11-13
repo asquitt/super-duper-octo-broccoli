@@ -1,0 +1,65 @@
+# Core dependencies
+numpy>=1.21.0
+scipy>=1.7.0
+pandas>=1.3.0
+
+# Audio processing
+librosa>=0.9.0
+soundfile>=0.11.0
+audioread>=3.0.0
+pydub>=0.25.0
+
+# Video processing
+opencv-python>=4.5.0
+opencv-contrib-python>=4.5.0
+imageio>=2.9.0
+imageio-ffmpeg>=0.4.0
+
+# Text processing and NLP
+transformers>=4.30.0
+sentence-transformers>=2.2.0
+torch>=2.0.0
+tokenizers>=0.13.0
+scikit-learn>=1.0.0
+nltk>=3.6.0
+spacy>=3.5.0
+
+# Speech recognition (for transcript generation)
+openai-whisper>=20230314
+faster-whisper>=0.9.0
+
+# LLM for fusion and title generation
+anthropic>=0.18.0
+openai>=1.0.0
+langchain>=0.1.0
+langchain-community>=0.0.20
+
+# Configuration and utilities
+pyyaml>=6.0
+python-dotenv>=0.19.0
+click>=8.0.0
+tqdm>=4.62.0
+rich>=12.0.0
+loguru>=0.6.0
+
+# API and web
+fastapi>=0.95.0
+uvicorn>=0.20.0
+pydantic>=2.0.0
+python-multipart>=0.0.6
+
+# Cloud storage
+boto3>=1.26.0  # AWS
+google-cloud-storage>=2.10.0  # GCP
+azure-storage-blob>=12.14.0  # Azure
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=3.0.0
+pytest-asyncio>=0.20.0
+
+# Development
+black>=23.0.0
+flake8>=5.0.0
+isort>=5.11.0
+mypy>=1.0.0

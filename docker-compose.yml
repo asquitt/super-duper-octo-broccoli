@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  clip-extractor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: clip-extractor:latest
+    container_name: clip-extractor
+    volumes:
+      # Mount input and output directories
+      - ./input:/input
+      - ./output:/output
+      # Mount config for customization
+      - ./config:/app/config
+      # Persistent cache
+      - clip-cache:/app/cache
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CLIP_EXTRACTOR_NUM_CLIPS=5
+      - CLIP_EXTRACTOR_MIN_DURATION=30
+      - CLIP_EXTRACTOR_MAX_DURATION=60
+    # Override default command to process a file
+    # command: ["--input", "/input/video.mp4", "--output", "/output/clips.json"]
+
+    # Resource limits (adjust based on your system)
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+
+volumes:
+  clip-cache:
+    driver: local

@@ -1,0 +1,27 @@
+# AWS Lambda Dockerfile
+# Based on AWS Lambda Python 3.9 base image
+
+FROM public.ecr.aws/lambda/python:3.9
+
+# Install system dependencies (ffmpeg)
+RUN yum install -y wget tar xz && \
+    wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz && \
+    tar xf ffmpeg-release-amd64-static.tar.xz && \
+    mv ffmpeg-*-amd64-static/ffmpeg /usr/local/bin/ && \
+    mv ffmpeg-*-amd64-static/ffprobe /usr/local/bin/ && \
+    rm -rf ffmpeg-* && \
+    yum clean all
+
+# Copy requirements
+COPY requirements-minimal.txt ${LAMBDA_TASK_ROOT}/
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r ${LAMBDA_TASK_ROOT}/requirements-minimal.txt
+
+# Copy application code
+COPY src/ ${LAMBDA_TASK_ROOT}/src/
+COPY config/ ${LAMBDA_TASK_ROOT}/config/
+COPY deployment/aws/lambda_handler.py ${LAMBDA_TASK_ROOT}/
+
+# Set the CMD to your handler
+CMD ["lambda_handler.handler"]

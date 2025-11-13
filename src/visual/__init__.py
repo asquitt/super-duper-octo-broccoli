@@ -1,0 +1,1 @@
+"""Visual engagement detection module."""

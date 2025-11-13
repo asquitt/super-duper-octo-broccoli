@@ -1,0 +1,171 @@
+# Multimodal Clip Extractor Configuration
+
+# General settings
+general:
+  num_clips: 5  # Number of top clips to extract
+  min_clip_duration: 30  # Minimum clip duration in seconds
+  max_clip_duration: 60  # Maximum clip duration in seconds
+  overlap_threshold: 0.3  # Maximum overlap between clips (0-1)
+  output_format: "json"  # json or csv
+
+# Audio/Emotion Analysis Settings
+audio:
+  enabled: true
+  sample_rate: 22050
+  frame_length: 2048
+  hop_length: 512
+
+  # Emotion detection
+  emotion:
+    features: ["mfcc", "spectral_centroid", "zero_crossing_rate", "energy"]
+    mfcc_coefficients: 13
+    window_size: 3.0  # seconds
+
+  # Thresholds
+  thresholds:
+    high_energy: 0.7
+    pitch_variation: 0.6
+    emotion_intensity: 0.65
+
+# Text/Topic Analysis Settings
+text:
+  enabled: true
+
+  # Model selection (choose based on resources)
+  model: "distilbert-base-uncased"  # Lightweight option
+  # Alternative: "sentence-transformers/all-MiniLM-L6-v2"
+
+  # Transcript generation (if not provided)
+  transcription:
+    model: "base"  # whisper model: tiny, base, small, medium, large
+    language: "en"
+
+  # Topic detection
+  topic:
+    window_size: 10  # sentences
+    keyword_density_threshold: 0.7
+    topic_change_threshold: 0.5
+
+  # Question detection
+  question_detection: true
+
+  # Thresholds
+  thresholds:
+    keyword_density: 0.65
+    topic_importance: 0.6
+    qa_score: 0.7
+
+# Visual/Engagement Analysis Settings
+visual:
+  enabled: true
+
+  # Face detection
+  face_detection:
+    enabled: true
+    cascade: "haarcascade_frontalface_default.xml"
+    scale_factor: 1.1
+    min_neighbors: 5
+
+  # Motion detection
+  motion_detection:
+    enabled: true
+    threshold: 25
+    min_area: 500
+
+  # Scene change detection
+  scene_change:
+    enabled: true
+    threshold: 30.0
+
+  # Sampling (to reduce processing time)
+  sampling:
+    fps: 1  # Process N frames per second (1 = every second)
+
+  # Thresholds
+  thresholds:
+    face_activity: 0.6
+    motion_intensity: 0.65
+    scene_importance: 0.5
+
+# Multimodal Fusion Settings
+fusion:
+  # Fusion strategy: "weighted", "learned", or "llm"
+  strategy: "weighted"
+
+  # Weights for each modality (must sum to 1.0)
+  weights:
+    audio: 0.35
+    text: 0.40
+    visual: 0.25
+
+  # LLM-based fusion (if strategy is "llm")
+  llm:
+    provider: "openai"  # openai, anthropic, or local
+    model: "gpt-3.5-turbo"  # Cost-effective option
+    temperature: 0.7
+    max_tokens: 150
+
+  # Title generation
+  title_generation:
+    enabled: true
+    max_length: 60
+    style: "engaging"  # engaging, professional, or casual
+    include_emoji: true
+
+  # Ranking
+  ranking:
+    min_score: 0.5  # Minimum score to be considered
+    boost_combined_signals: true  # Boost clips where multiple signals align
+
+# Processing Settings
+processing:
+  # Parallel processing
+  num_workers: 4  # Number of parallel workers (set to CPU cores)
+
+  # Chunking for large files
+  chunk_duration: 300  # Process in 5-minute chunks
+
+  # Caching
+  cache_enabled: true
+  cache_dir: "./cache"
+
+  # Temporary files
+  temp_dir: "./temp"
+  cleanup_temp: true
+
+# Cloud Settings (for deployment)
+cloud:
+  # AWS
+  aws:
+    region: "us-east-1"
+    s3_bucket: "clip-extractor-bucket"
+    lambda_memory: 3008  # MB
+    lambda_timeout: 900  # seconds
+
+  # GCP
+  gcp:
+    region: "us-central1"
+    storage_bucket: "clip-extractor-bucket"
+    cloud_run_memory: "4Gi"
+    cloud_run_timeout: 900
+
+  # Azure
+  azure:
+    region: "eastus"
+    storage_account: "clipextractor"
+    container_name: "videos"
+    function_timeout: 900
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "clip_extractor.log"
+  console: true
+
+# Development/Debug
+debug:
+  enabled: false
+  save_intermediate: false  # Save intermediate outputs for debugging
+  visualize_scores: false  # Generate score visualization plots
+  profile_performance: false
